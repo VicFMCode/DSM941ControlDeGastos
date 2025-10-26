@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1044979475293",
+    "project_id": "dsm941controldegastos",
+    "storage_bucket": "dsm941controldegastos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044979475293:android:66f34f7d0517f925667eb4",
+        "android_client_info": {
+          "package_name": "com.example.dsm941controldegastos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1044979475293-2f6aakg5ea2cm6j6vvtagcf4645ot6mj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dsm941controldegastos",
+            "certificate_hash": "43fb7c9f7c8f3ec6735ce6235256df822b7e07b1"
+          }
+        },
+        {
+          "client_id": "1044979475293-hfm69292oh3ueb8justd1v2vnbv07pgd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBCk6dX_NLG13BvWYzEBg344WXqYuR6O8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1044979475293-hfm69292oh3ueb8justd1v2vnbv07pgd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
