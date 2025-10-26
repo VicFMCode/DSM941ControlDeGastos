@@ -22,6 +22,8 @@ import kotlinx.coroutines.tasks.await
  */
 class AuthService(private val context: Context) { // Clase renombrada de wAuthService a AuthService
 
+    fun getCurrentUserUid(): String? = auth.currentUser?.uid
+
     // Inicialización de Firebase Auth
     private val auth: FirebaseAuth = Firebase.auth
 
@@ -124,4 +126,6 @@ class AuthService(private val context: Context) { // Clase renombrada de wAuthSe
     fun getUserId(): String? {
         return auth.currentUser?.uid
     }
+
+    companion object
 }

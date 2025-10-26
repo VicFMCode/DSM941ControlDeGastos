@@ -28,10 +28,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Mostrar un mensaje de bienvenida (solo por prueba)
-        Toast.makeText(this, "Bienvenido: ${authService.getCurrentUser()?.email}", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, "Bienvenido: ${authService.getCurrentUser()?.email}", Toast.LENGTH_LONG).show()
+
+        // 🔹 Aquí agregamos el código para abrir la pantalla de gastos
+        val intent = Intent(this, ExpensesActivity::class.java)
+        startActivity(intent)
+        // Opcional: finish() si no quieres que el usuario vuelva atrás al MainActivity
+        // finish()
 
         // --- Lógica de Cierre de Sesión (Logout) ---
-        // Asume que el ID del botón es 'buttonLogout'
         val logoutButton = findViewById<Button>(R.id.buttonLogout)
         logoutButton.setOnClickListener {
             authService.signOut()
@@ -40,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun navigateToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         // Cierra todas las activities para evitar volver atrás
@@ -47,4 +53,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+
 }

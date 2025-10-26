@@ -41,6 +41,9 @@
             android:name=".ui.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.Auth"/>
+        <activity android:name=".ui.AddExpenseActivity" />
+        <activity android:name=".ui.ExpensesActivity" />
+
 
     </application>
 
