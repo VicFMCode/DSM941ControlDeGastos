@@ -35,7 +35,6 @@ class FirestoreRepository {
                 listener(gastos)
             }
 
-    // ✅ CORRECCIÓN: nuevo Calendar por cada gasto para evitar errores de comparación
     fun calcularTotalMensual(gastos: List<Gasto>): Double {
         val calActual = Calendar.getInstance()
         val mesActual = calActual.get(Calendar.MONTH)

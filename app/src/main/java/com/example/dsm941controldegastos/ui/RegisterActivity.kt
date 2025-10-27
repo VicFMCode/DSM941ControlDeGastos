@@ -53,16 +53,16 @@ class RegisterActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                authService.signUp(email, password).await() // ✅ CORRECCIÓN
+                authService.signUp(email, password).await() 
                 Toast.makeText(this@RegisterActivity, "¡Registro exitoso! Iniciando sesión...", Toast.LENGTH_LONG).show()
-                navigateToExpenses() // ✅ CAMBIO
+                navigateToExpenses()
             } catch (e: Exception) {
                 Toast.makeText(this@RegisterActivity, "Error de registro: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun navigateToExpenses() { // ✅ NUEVA FUNCIÓN
+    private fun navigateToExpenses() {
         val intent = Intent(this, ExpensesActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
