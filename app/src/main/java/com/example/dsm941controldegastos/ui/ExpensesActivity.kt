@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.dsm941controldegastos.data.FirestoreRepository
@@ -17,6 +18,7 @@ import com.example.dsm941controldegastos.service.AuthService
 import java.text.SimpleDateFormat
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class) // Aplica solo a Material3
 class ExpensesActivity : ComponentActivity() {
 
     private val repo = FirestoreRepository()
@@ -24,31 +26,58 @@ class ExpensesActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Instanciamos AuthService con el contexto actual
         authService = AuthService(this)
 
         setContent {
-            ExpensesScreen(
-                onAddClick = { startActivity(Intent(this, AddExpenseActivity::class.java)) }
-            )
+            MaterialTheme {
+                ExpensesScreen(
+                    onAddClick = { startActivity(Intent(this, AddExpenseActivity::class.java)) },
+                    onLogoutClick = {
+                        authService.signOut()
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    }
+                )
+            }
         }
     }
 
     @Composable
-    fun ExpensesScreen(onAddClick: () -> Unit) {
-        val uid = authService.getCurrentUserUid() // ✅ Ahora funciona correctamente
+    fun ExpensesScreen(onAddClick: () -> Unit, onLogoutClick: () -> Unit) {
+        val uid = authService.getCurrentUserUid()
         var gastos by remember { mutableStateOf<List<Gasto>>(emptyList()) }
+        var loading by remember { mutableStateOf(true) }
 
         LaunchedEffect(uid) {
             if (!uid.isNullOrBlank()) {
-                repo.observarGastos(uid) { lista -> gastos = lista }
+                try {
+                    repo.observarGastos(uid) { lista ->
+                        gastos = lista
+                        loading = false
+                    }
+                } catch (e: Exception) {
+                    // Evita que la UI se bloquee
+                    gastos = emptyList()
+                    loading = false
+                }
+            } else {
+                loading = false
             }
         }
 
         val totalMensual = repo.calcularTotalMensual(gastos)
 
         Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Gastos personales") },
+                    actions = {
+                        TextButton(onClick = onLogoutClick) {
+                            Text("Cerrar sesión")
+                        }
+                    }
+                )
+            },
             floatingActionButton = {
                 FloatingActionButton(onClick = onAddClick) {
                     Text("+")
@@ -56,20 +85,24 @@ class ExpensesActivity : ComponentActivity() {
             }
         ) { padding ->
             Column(
-                Modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .padding(16.dp)
             ) {
-                Text("Gastos personales", style = MaterialTheme.typography.headlineSmall)
-                Spacer(Modifier.height(8.dp))
                 Text("Total mensual: $${"%.2f".format(totalMensual)}")
                 Spacer(Modifier.height(12.dp))
 
-                if (gastos.isEmpty()) {
-                    Text("No hay gastos registrados aún.")
-                } else {
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                when {
+                    loading -> Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                    uid.isNullOrBlank() -> Text("No hay usuario logueado.", style = MaterialTheme.typography.bodyMedium)
+                    gastos.isEmpty() -> Text("No hay gastos registrados.", style = MaterialTheme.typography.bodyMedium)
+                    else -> LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(gastos) { gasto ->
                             GastoItem(gasto)
                             Divider()
@@ -84,7 +117,7 @@ class ExpensesActivity : ComponentActivity() {
     fun GastoItem(gasto: Gasto) {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         Row(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween

@@ -35,13 +35,16 @@ class FirestoreRepository {
                 listener(gastos)
             }
 
+    // ✅ CORRECCIÓN: nuevo Calendar por cada gasto para evitar errores de comparación
     fun calcularTotalMensual(gastos: List<Gasto>): Double {
-        val cal = Calendar.getInstance()
-        val mesActual = cal.get(Calendar.MONTH)
-        val añoActual = cal.get(Calendar.YEAR)
+        val calActual = Calendar.getInstance()
+        val mesActual = calActual.get(Calendar.MONTH)
+        val añoActual = calActual.get(Calendar.YEAR)
+
         return gastos.filter {
-            cal.time = it.fecha
-            cal.get(Calendar.MONTH) == mesActual && cal.get(Calendar.YEAR) == añoActual
+            val calGasto = Calendar.getInstance()
+            calGasto.time = it.fecha
+            calGasto.get(Calendar.MONTH) == mesActual && calGasto.get(Calendar.YEAR) == añoActual
         }.sumOf { it.monto }
     }
 }
