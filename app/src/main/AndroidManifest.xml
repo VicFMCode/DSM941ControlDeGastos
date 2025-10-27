@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,10 +15,13 @@
         android:theme="@style/Theme.DSM941ControlDeGastos"
         tools:targetApi="31">
 
-        <!-- Pantalla de inicio-->
+        <!-- ******************************************** -->
+        <!-- 1. DEFINIMOS LOGINACTIVITY COMO LA PANTALLA DE INICIO -->
+        <!-- ******************************************** -->
         <activity
             android:name=".ui.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Auth">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +29,18 @@
             </intent-filter>
         </activity>
 
-        <!--Pantallas -->
-        <activity android:name=".ui.RegisterActivity" android:exported="false" />
-        <activity android:name=".ui.AddExpenseActivity" android:exported="false" />
-        <activity android:name=".ui.ExpensesActivity" android:exported="false" />
+        <!-- ******************************************** -->
+        <!-- 2. REGISTRAMOS LAS DEMÁS ACTIVITIES -->
+        <!-- ******************************************** -->
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Auth"/>
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Auth"/>
 
     </application>
 
